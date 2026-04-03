@@ -1,0 +1,12 @@
+# Ignore dataset
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+image/
+
+# Ignore ALL CSV files
+*.csv
+
+# Other
+*.zip
+__pycache__/
+*.pyc
