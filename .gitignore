@@ -9,4 +9,7 @@ image/
 # Other
 *.zip
 __pycache__/
-*.pyc
+
+# Ignore generated files
+*.png
+*.npy
