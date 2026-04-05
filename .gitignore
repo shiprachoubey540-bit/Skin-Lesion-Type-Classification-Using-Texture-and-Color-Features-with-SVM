@@ -10,3 +10,26 @@ image/
 *.zip
 __pycache__/
 *.pyc
+
+# Ignore generated files
+*.png
+*.npy
+
+
+# Image datasets (large folders)
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+image/
+
+# CSV data files
+HAM10000_metadata.csv
+hmnist_8_8_L.csv
+hmnist_8_8_RGB.csv
+hmnist_28_28_L.csv
+hmnist_28_28_RGB.csv
+
+# Numpy cache files
+*.npy
+
+# Old notebook
+load.ipynb
