@@ -1,20 +1,22 @@
-Skin Lesion Classification using Machine Learning
+#**Skin Lesion Classification using Machine Learning**
 
-Problem Statement:
+##Problem Statement:
 The study requires skin lesion images to be classified into seven different categories which include melanoma and basal cell carcinoma through the application of conventional machine learning methods that exclude deep learning.
 
-Dataset:
+##Dataset:
 HAM10000 dataset: The dataset includes dermatoscopic images that show various skin lesions
 
-Methodology:
+##Methodology:
 1. Data collection
 2. Data preprocessing:
+
 2.1: Data cleaning: checked for missing or null values, handled missing values.
-3. Exploratory Data Analysis (EDA):
+4. Exploratory Data Analysis (EDA):
 Analyzed feature distributions using histograms and boxplots, identified outliers and skewness, Visualized relationships between features and the target variable.
 
-4. Feature Engineering:
+5. Feature Engineering:
 Features are derived from images instead of using deep learning.
+
 4.1: GLCM Texture Features: Texture characteristics of the lesion were extracted using the Gray Level Co-occurrence Matrix (GLCM). The following features were computed:
 * Contrast – Measures intensity variation between neighboring pixels.
 * Correlation – Measures how correlated a pixel is to its neighbor.
@@ -37,6 +39,7 @@ Features are derived from images instead of using deep learning.
 * The system uses XGBoost algorithm
 6. Model Training
 7. Model Evaluation:
+  
 Evaluation Metrics:
 * Accuracy
 * precision
@@ -44,8 +47,9 @@ Evaluation Metrics:
 * F1 Score
 
 8. Confusion Matrix:
+
  The system uses a Confusion Matrix to evaluate its performance
-9. Deployment:
+10. Deployment:
 A Streamlit web application was developed which enables users to perform two main functions.
 * Users can upload a skin lesion image
 * Users receive the predicted skin lesion class along with its confidence level
@@ -54,5 +58,5 @@ A Streamlit web application was developed which enables users to perform two mai
 * Member 2: The member built the system through feature extraction and model development
 * Member 3: The member performed system evaluation and deployment while creating documentation
   
-Conclusion:
+##Conclusion:
 The project demonstrates machine learning's ability to classify skin lesions through its system which automatically classifies skin lesions and its development of a user-friendly system that delivers immediate prediction results.
