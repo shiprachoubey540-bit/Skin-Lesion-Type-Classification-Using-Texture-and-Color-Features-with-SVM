@@ -1,12 +1,12 @@
-#**Skin Lesion Classification using Machine Learning**
+**Skin Lesion Classification using Machine Learning**
 
-##Problem Statement:
+**Problem Statement:**
 The study requires skin lesion images to be classified into seven different categories which include melanoma and basal cell carcinoma through the application of conventional machine learning methods that exclude deep learning.
 
-##Dataset:
+**Dataset:**
 HAM10000 dataset: The dataset includes dermatoscopic images that show various skin lesions
 
-##Methodology:
+**Methodology:**
 1. Data collection
 2. Data preprocessing:
 
@@ -58,5 +58,5 @@ A Streamlit web application was developed which enables users to perform two mai
 * Member 2: The member built the system through feature extraction and model development
 * Member 3: The member performed system evaluation and deployment while creating documentation
   
-##Conclusion:
+**Conclusion:**
 The project demonstrates machine learning's ability to classify skin lesions through its system which automatically classifies skin lesions and its development of a user-friendly system that delivers immediate prediction results.
