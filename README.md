@@ -11,10 +11,10 @@ HAM10000 dataset: The dataset includes dermatoscopic images that show various sk
 2. Data preprocessing:
 
 2.1: Data cleaning: checked for missing or null values, handled missing values.
-4. Exploratory Data Analysis (EDA):
+3. Exploratory Data Analysis (EDA):
 Analyzed feature distributions using histograms and boxplots, identified outliers and skewness, Visualized relationships between features and the target variable.
 
-5. Feature Engineering:
+4. Feature Engineering:
 Features are derived from images instead of using deep learning.
 
 4.1: GLCM Texture Features: Texture characteristics of the lesion were extracted using the Gray Level Co-occurrence Matrix (GLCM). The following features were computed:
@@ -22,15 +22,18 @@ Features are derived from images instead of using deep learning.
 * Correlation – Measures how correlated a pixel is to its neighbor.
 * Energy – Represents uniformity of texture.
 * Homogeneity – Measures closeness of distribution of elements.
+  
 4.2: HSV Color Features: Color information was extracted by converting images from RGB to HSV color space.
 * Hue (color type)
 * Saturation (color intensity)
 * Value (brightness)
+  
 4.3: ABCD Rule Features:
 * Asymmetry-Measures symmetry of lesion shape across axes
 * Border Irregularity-Quantifies uneven or jagged lesion boundaries
 * Color Variation-Detects the presence of multiple colors within the lesion
 * Diameter-Measures lesion size (important for melanoma detection)
+  
 5. Handling Class Imbalance: The systems applied SMOTE for their operations.
   
  Models Used:
@@ -47,8 +50,8 @@ Evaluation Metrics:
 * F1 Score
 
 8. Confusion Matrix:
+The system uses a Confusion Matrix to evaluate its performance
 
- The system uses a Confusion Matrix to evaluate its performance
 10. Deployment:
 A Streamlit web application was developed which enables users to perform two main functions.
 * Users can upload a skin lesion image
