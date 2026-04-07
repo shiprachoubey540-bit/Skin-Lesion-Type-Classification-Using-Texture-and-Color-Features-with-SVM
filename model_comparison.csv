@@ -1,0 +1,4 @@
+Model,Accuracy (%),Macro Precision,Macro Recall,Macro F1,Avg Sensitivity,Avg Specificity
+SVM,71.94,0.474,0.448,0.457,0.448,0.93
+Random Forest,71.89,0.47,0.451,0.455,0.451,0.933
+XGBoost,72.84,0.487,0.475,0.48,0.475,0.93
