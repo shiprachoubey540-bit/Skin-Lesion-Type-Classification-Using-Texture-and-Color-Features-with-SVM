@@ -62,14 +62,17 @@ The dataset was heavily imbalanced (nv=6705 vs df=115). SMOTE (Synthetic Minorit
 * The system uses Support Vector Machine with RBF kernel package
 * The system uses Random Forest algorithm
 * The system uses XGBoost algorithm
+
 7. Model Training
 
-ModelKey          Settings
-SVMRBF kernel      C=10
-Random Forest      200 trees
-XGBoost           300 rounds lr=0.05, max depth=6
+Model            | Key Settings
+-----------------|-------------------------------
+SVM              | RBF kernel, C=10
+Random Forest    | 200 trees
+XGBoost          | 300 rounds, lr=0.05, max depth=6
 
-All features were StandardScaler normalized before training since SVM is sensitive to feature scale, and consistency was maintained for RF and XGBoost as well.
+All features were StandardScaler normalized before training since SVM is sensitive to feature scale, and consistency was maintained for Random Forest and XGBoost as well.
+
 
 8. Model Evaluation:
   
