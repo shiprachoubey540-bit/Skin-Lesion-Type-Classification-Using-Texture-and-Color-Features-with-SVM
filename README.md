@@ -31,7 +31,7 @@ Energy — uniformity of the GLCM. High energy = repetitive texture pattern.
 Correlation — how linearly dependent a pixel is on its neighbor. High = structured texture..
 
   
-2. HSV Color Histograms
+- Second point HSV Color Histograms
 
 Instead of raw RGB, We converted images to HSV (Hue, Saturation, Value) because it separates color information from lighting, making it more robust to brightness variation in dermoscopy images. You computed a 16-bin histogram for each of the 3 channels, giving 48 features per image, all L1-normalised so they sum to 1.
 
@@ -40,11 +40,13 @@ Saturation — how vivid or washed out the color is.
 
 Value — brightness of the image.
   
-4.3: ABCD Rule Features:
-* Asymmetry-Measures symmetry of lesion shape across axes
-* Border Irregularity-Quantifies uneven or jagged lesion boundaries
-* Color Variation-Detects the presence of multiple colors within the lesion
-* Diameter-Measures lesion size (important for melanoma detection)
+- Third point ABCD Shape Descriptors
+
+These mimic the clinical ABCD criteria dermatologists use to diagnose skin lesions visually. The lesion was first segmented using Otsu thresholding + morphological operations to isolate the lesion from skin background.
+
+Asymmetry — the lesion mask is flipped horizontally and vertically, and the pixel mismatch between original and flipped versions is measured. A perfectly symmetric lesion scores 0, a highly asymmetric one scores closer to 1. Malignant lesions tend to be asymmetric.
+
+Border Irregularity — computed using the compactness formula: perimeter² / (4π × area). A perfect circle gives 1.0, and jagged/irregular borders push the value higher. Outliers were Winsorized (capped at the IQR upper fence) to prevent extreme values from distorting the model.
   
 5. Handling Class Imbalance: The systems applied SMOTE for their operations.
   
