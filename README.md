@@ -54,14 +54,16 @@ Since GLCM was built without an image_id column but all three feature extractors
 
 After merging with the real dx labels from the HAM10000 metadata csv, we checked for outliers again before proceeding with model building. This step was essential, as it had caused some problems. Some columns got null values after feature engineering, these had to checked and removed before entering the model training part.
 
-7. Handling Class Imbalance: The systems applied SMOTE for their operations.
-  
+6. Class Imbalance — SMOTE
+
+The dataset was heavily imbalanced (nv=6705 vs df=115). SMOTE (Synthetic Minority Oversampling Technique) was applied on the training set only after the train/test split, generating synthetic samples for minority classes so the models don't just learn to predict the majority class.
+
  Models Used:
 * The system uses Support Vector Machine with RBF kernel package
 * The system uses Random Forest algorithm
 * The system uses XGBoost algorithm
-6. Model Training
-7. Model Evaluation:
+7. Model Training
+8. Model Evaluation:
   
 Evaluation Metrics:
 * Accuracy
@@ -69,7 +71,7 @@ Evaluation Metrics:
 * Recall
 * F1 Score
 
-8. Confusion Matrix:
+9. Confusion Matrix:
 The system uses a Confusion Matrix to evaluate its performance
 
 10. Deployment:
