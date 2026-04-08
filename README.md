@@ -17,18 +17,28 @@ Analyzed feature distributions using histograms and boxplots, identified outlier
 4. Feature Engineering:
 
 - First point GLCM Texture Features
+
 GLCM (Gray Level Co-occurrence Matrix) captures how often pairs of pixel intensities appear together at a given direction and distance. We extracted 5 properties across 4 angles (0°, 45°, 90°, 135°), giving 20 features per image.
+
 Contrast — measures intensity difference between a pixel and its neighbor. High contrast = rough texture.
+
 Dissimilarity — similar to contrast but increases linearly, not exponentially.
+
 Homogeneity — how uniform the texture is. Smooth regions score high.
+
 Energy — uniformity of the GLCM. High energy = repetitive texture pattern.
+
 Correlation — how linearly dependent a pixel is on its neighbor. High = structured texture..
 
   
-4.2: HSV Color Features: Color information was extracted by converting images from RGB to HSV color space.
-* Hue (color type)
-* Saturation (color intensity)
-* Value (brightness)
+2. HSV Color Histograms
+
+Instead of raw RGB, We converted images to HSV (Hue, Saturation, Value) because it separates color information from lighting, making it more robust to brightness variation in dermoscopy images. You computed a 16-bin histogram for each of the 3 channels, giving 48 features per image, all L1-normalised so they sum to 1.
+
+Hue — the actual color (red, brown, black etc.) which is clinically significant in lesion diagnosis.
+Saturation — how vivid or washed out the color is.
+
+Value — brightness of the image.
   
 4.3: ABCD Rule Features:
 * Asymmetry-Measures symmetry of lesion shape across axes
