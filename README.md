@@ -48,7 +48,13 @@ Asymmetry — the lesion mask is flipped horizontally and vertically, and the pi
 
 Border Irregularity — computed using the compactness formula: perimeter² / (4π × area). A perfect circle gives 1.0, and jagged/irregular borders push the value higher. Outliers were Winsorized (capped at the IQR upper fence) to prevent extreme values from distorting the model.
   
-5. Handling Class Imbalance: The systems applied SMOTE for their operations.
+5.  Merging
+
+Since GLCM was built without an image_id column but all three feature extractors looped the same folder in the same order, the three DataFrames were aligned by row position using pd.concat and the folder-based label was replaced with the real dx labels from HAM10000_metadata.csv.
+
+After merging with the real dx labels from the HAM10000 metadata csv, we checked for outliers again before proceeding with model building. This step was essential, as it had caused some problems. Some columns got null values after feature engineering, these had to checked and removed before entering the model training part.
+
+7. Handling Class Imbalance: The systems applied SMOTE for their operations.
   
  Models Used:
 * The system uses Support Vector Machine with RBF kernel package
