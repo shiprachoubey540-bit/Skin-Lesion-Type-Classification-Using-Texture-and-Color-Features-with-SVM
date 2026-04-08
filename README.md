@@ -15,13 +15,15 @@ HAM10000 dataset: The dataset includes dermatoscopic images that show various sk
 Analyzed feature distributions using histograms and boxplots, identified outliers and skewness, Visualized relationships between features and the target variable.
 
 4. Feature Engineering:
-Features are derived from images instead of using deep learning.
 
-4.1: GLCM Texture Features: Texture characteristics of the lesion were extracted using the Gray Level Co-occurrence Matrix (GLCM). The following features were computed:
-* Contrast – Measures intensity variation between neighboring pixels.
-* Correlation – Measures how correlated a pixel is to its neighbor.
-* Energy – Represents uniformity of texture.
-* Homogeneity – Measures closeness of distribution of elements.
+- First point GLCM Texture Features
+GLCM (Gray Level Co-occurrence Matrix) captures how often pairs of pixel intensities appear together at a given direction and distance. We extracted 5 properties across 4 angles (0°, 45°, 90°, 135°), giving 20 features per image.
+Contrast — measures intensity difference between a pixel and its neighbor. High contrast = rough texture.
+Dissimilarity — similar to contrast but increases linearly, not exponentially.
+Homogeneity — how uniform the texture is. Smooth regions score high.
+Energy — uniformity of the GLCM. High energy = repetitive texture pattern.
+Correlation — how linearly dependent a pixel is on its neighbor. High = structured texture..
+
   
 4.2: HSV Color Features: Color information was extracted by converting images from RGB to HSV color space.
 * Hue (color type)
