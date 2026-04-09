@@ -24,12 +24,12 @@ classes = ['Actinic keratoses', 'Basal cell carcinoma', 'Benign keratosis',
 def extract_features(img_input):
     # Ensure it's a fresh copy
     img = np.copy(img_input)
-    img_resized = cv2.resize(img, (128, 128))
+    img_resized = cv2.resize(img, (224, 224))
     hsv = cv2.cvtColor(img_resized, cv2.COLOR_RGB2HSV)
     gray = cv2.cvtColor(img_resized, cv2.COLOR_RGB2GRAY)
 
     # 32 bins for H and S = 64 features
-    h_hist = cv2.calcHist([hsv], [0], None, [32], [0, 256]).flatten()
+    h_hist = cv2.calcHist([hsv], [0], None, [16], [0, 256]).flatten()
     s_hist = cv2.calcHist([hsv], [1], None, [32], [0, 256]).flatten()
     color_feats = np.concatenate([h_hist, s_hist])
 
