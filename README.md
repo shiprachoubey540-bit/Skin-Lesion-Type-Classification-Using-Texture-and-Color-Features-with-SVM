@@ -70,6 +70,9 @@ Model Evaluation & Validation:
 To ensure high diagnostic accuracy, we evaluated three primary architectures using the extracted GLCM, HSV, and ABCD features.
 
 Models implemented:
+SVM (RBF Kernel): Optimized with C=10 for high-dimensional feature mapping.
+Random Forest: Utilized 200 estimators to handle non-linear feature relationships.
+XGBoost: Fine-tuned with a learning rate of 0.05 and mlogloss to handle multiclass complexity.
 
 
 
