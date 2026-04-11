@@ -85,5 +85,10 @@ Feature Fusion: Real-time extraction of 20 GLCM textures, 48 HSV color bins, and
 Normalization: Application of the saved StandardScaler.
 Inference: Prediction via the serialized .pkl model.
 
+How to Run the App:
+Ensure Models Exist: Verify that svm.pkl, scaler.pkl, and label_encoder.pkl are inside the /models folder.
+Install Dependencies:
+pip install flask opencv-python scikit-image pandas scikit-learn imbalanced-learn xgboost
+python app.py
 
 
