@@ -74,5 +74,16 @@ SVM (RBF Kernel): Optimized with C=10 for high-dimensional feature mapping.
 Random Forest: Utilized 200 estimators to handle non-linear feature relationships.
 XGBoost: Fine-tuned with a learning rate of 0.05 and mlogloss to handle multiclass complexity.
 
+Evaluation metrics: 
+Models were assessed using Confusion Matrices and Classification Reports (Precision, Recall, and F1-Score)
+
+Deployment:
+Pipeline Integration: 
+The deployment script replicates the exact training pipeline:
+Preprocessing: Resizing to 128x128.
+Feature Fusion: Real-time extraction of 20 GLCM textures, 48 HSV color bins, and 2 ABCD shape features.
+Normalization: Application of the saved StandardScaler.
+Inference: Prediction via the serialized .pkl model.
+
 
 
