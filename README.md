@@ -63,3 +63,13 @@ A Streamlit web application was developed which enables users to perform two mai
   
 **Conclusion:**
 The project demonstrates machine learning's ability to classify skin lesions through its system which automatically classifies skin lesions and its development of a user-friendly system that delivers immediate prediction results.
+
+**Member3**
+
+Model Evaluation & Validation:
+To ensure high diagnostic accuracy, we evaluated three primary architectures using the extracted GLCM, HSV, and ABCD features.
+
+Models implemented:
+
+
+
