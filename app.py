@@ -3,178 +3,131 @@ import cv2
 import numpy as np
 import joblib
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 from skimage.feature import graycomatrix, graycoprops
 from PIL import Image
-import io
-import plotly.express as px
 
-# --- 1. SETTINGS & ASSET LOADING ---
-st.set_page_config(
-    page_title="Skin Lesion AI Diagnostic Dashboard",
-    page_icon="🔬",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# --- 1. PAGE CONFIG & THEMING ---
+st.set_page_config(page_title="DermAI Clinical Dashboard", layout="wide")
 
-# Custom Professional Styling
+# Custom CSS for the unique "DermAI" Dark-Card Theme
 st.markdown("""
     <style>
-    .main { background-color: #f4f7f9; }
-    .stMetric { background-color: #ffffff; padding: 15px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    [data-testid="stSidebar"] { background-color: #ffffff; }
-    .stButton>button { width: 100%; border-radius: 5px; height: 3em; font-weight: bold; }
+    .main { background-color: #f8f9fa; }
+    .metric-card { background-color: #1e293b; color: white; padding: 20px; border-radius: 12px; }
+    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
+    .stTabs [data-baseweb="tab"] { height: 50px; white-space: pre-wrap; background-color: #f1f5f9; border-radius: 5px; }
     </style>
     """, unsafe_allow_html=True)
 
+# --- 2. ASSET LOADING ---
 @st.cache_resource
-def load_assets():
-    # Ensure these files are in your 'models/' folder
-    model  = joblib.load('models/svm.pkl')
+def load_models():
+    # Loading all 3 models for comparison
+    models = {
+        "SVM": joblib.load('models/svm.pkl'),
+        "Random Forest": joblib.load('models/random_forest.pkl'),
+        "XGBoost": joblib.load('models/xgboost.pkl')
+    }
     scaler = joblib.load('models/scaler.pkl')
-    return model, scaler
+    return models, scaler
 
-try:
-    model, scaler = load_assets()
-except Exception as e:
-    st.error(f"Error loading assets: {e}. Ensure .pkl files are in the 'models' folder.")
+models, scaler = load_models()
+classes = ['Actinic Keratoses', 'Basal Cell Carcinoma', 'Benign Keratosis', 
+           'Dermatofibroma', 'Melanoma', 'Melanocytic Nevi', 'Vascular Lesions']
 
-classes = ['Actinic keratoses', 'Basal cell carcinoma', 'Benign keratosis',
-           'Dermatofibroma', 'Melanoma', 'Nevus', 'Vascular lesions']
+# --- 3. FEATURE EXTRACTION (70 Features) ---
+def get_advanced_features(img_array):
+    img_res = cv2.resize(img_array, (224, 224))
+    gray = cv2.cvtColor(img_res, cv2.COLOR_RGB2GRAY)
+    hsv = cv2.cvtColor(cv2.resize(img_array, (224, 224)), cv2.COLOR_RGB2HSV)
 
-# --- 2. CORE FEATURE EXTRACTION ---
-def extract_features(img_input):
-    img = np.copy(img_input)
-    img_resized = cv2.resize(img, (224, 224))
+    # GLCM Texture
+    glcm = graycomatrix(gray, [1], [0, np.pi/4, np.pi/2, 3*np.pi/4], 256, True, True)
+    glcm_props = {p: graycoprops(glcm, p).mean() for p in ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation']}
+    
+    # HSV Color
+    hsv_list = [cv2.calcHist([hsv], [i], None, [16], [0, 256]).flatten() for i in range(3)]
+    hsv_feats = np.concatenate(hsv_list) / (img_res.size/3)
 
-    # Color Spaces
-    img_bgr = cv2.cvtColor(img_resized, cv2.COLOR_RGB2BGR)
-    gray = cv2.cvtColor(img_resized, cv2.COLOR_RGB2GRAY)
-    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-
-    # GLCM (Texture)
-    glcm = graycomatrix(gray, distances=[1],
-                        angles=[0, np.pi/4, np.pi/2, 3*np.pi/4],
-                        levels=256, symmetric=True, normed=True)
-    glcm_feats = []
-    for prop in ["contrast", "dissimilarity", "homogeneity", "energy", "correlation"]:
-        glcm_feats.extend(graycoprops(glcm, prop).flatten().tolist())
-
-    # HSV (Color)
-    hsv_feats = []
-    for ch in range(3):
-        hist = cv2.calcHist([hsv], [ch], None, [16], [0, 256])
-        hist = hist.flatten() / (hist.sum() + 1e-7)
-        hsv_feats.extend(hist.tolist())
-
-    # ABCD (Shape)
-    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    mask = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-
-    flip_h = cv2.flip(mask, 0)
-    flip_v = cv2.flip(mask, 1)
-    asym = float(np.clip(((np.sum(mask != flip_h) + np.sum(mask != flip_v)) / (2 * mask.size + 1e-7)), 0, 1))
-
+    # ABCD Shape
+    _, mask = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # Asymmetry calculation
+    asym = (np.sum(mask != cv2.flip(mask, 1)) / mask.size)
+    # Border calculation
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     border = 1.0
     if contours:
         cnt = max(contours, key=cv2.contourArea)
-        area, peri = cv2.contourArea(cnt), cv2.arcLength(cnt, True)
-        if area > 0: border = float(np.clip((peri ** 2) / (4 * np.pi * area + 1e-7), 1, 50))
+        border = (cv2.arcLength(cnt, True)**2) / (4 * np.pi * cv2.contourArea(cnt) + 1e-7)
 
-    return np.array(glcm_feats + hsv_feats + [asym, border]).reshape(1, -1)
+    full_vector = np.concatenate([list(glcm_props.values()), hsv_feats, [asym, border]])
+    return full_vector.reshape(1, -1), glcm_props, (asym, border), hsv.mean(axis=(0,1))
 
-# --- 3. SIDEBAR NAVIGATION ---
+# --- 4. SIDEBAR & NAVIGATION ---
 with st.sidebar:
-    st.title("🛡️ Analysis Info")
-    st.write("This dashboard provides AI-driven dermatological insights based on the HAM10000 dataset.")
+    st.image("https://cdn-icons-png.flaticon.com/512/387/387561.png", width=80)
+    st.title("DermAI")
+    selected_model_name = st.selectbox("🎯 Select Model", list(models.keys()))
+    
+    st.subheader("Model Details")
+    if selected_model_name == "SVM":
+        st.info("RBF kernel (C=10). Excellent boundary separation.")
+    
     st.markdown("---")
-    st.subheader("Extraction Summary")
-    st.write("✅ Texture (GLCM): 20 features")
-    st.write("✅ Color (HSV): 48 features")
-    st.write("✅ Shape (ABCD): 2 features")
-    st.markdown("---")
-    st.warning("⚠️ **Disclaimer:** For educational use only. Consult a dermatologist for medical diagnosis.")
+    st.write("📊 **Dataset:** HAM10000\n\n**Features:** 70 (GLCM+HSV+ABCD)")
 
-# --- 4. MAIN DASHBOARD ---
-st.title("🔬 Skin Lesion Clinical Decision Support System")
-st.divider()
+# --- 5. TABS INTERFACE ---
+t1, t2, t3 = st.tabs(["🔍 Classify", "📊 Dashboard", "ℹ️ About"])
 
-tab1, tab2 = st.tabs(["🚀 Real-time Diagnostic", "📈 Model Performance"])
-
-# --- TAB 1: DIAGNOSTIC TOOL ---
-with tab1:
-    col1, col2 = st.columns([1, 1], gap="large")
-
+with t1:
+    col1, col2 = st.columns([1, 1])
     with col1:
-        st.subheader("Input Image")
-        uploaded_file = st.file_uploader("Upload Image (JPG/PNG)", type=["jpg", "png", "jpeg"])
-        if uploaded_file:
-            image = Image.open(uploaded_file).convert('RGB')
-            with st.container(border=True):
-                st.image(image, caption="Uploaded Sample", use_container_width=True)
-            predict_btn = st.button('Perform Classification Analysis', type="primary")
-
+        u_file = st.file_uploader("Upload Lesion Image", type=['jpg', 'png', 'jpeg'])
+        if u_file:
+            img = Image.open(u_file).convert('RGB')
+            st.image(img, use_container_width=True)
+    
     with col2:
-        st.subheader("Diagnostic Intelligence")
-        if uploaded_file and predict_btn:
-            with st.spinner('Calculating 70-Feature Vector...'):
-                img_array = np.array(image)
-                features = extract_features(img_array)
-                scaled = scaler.transform(features)
+        if u_file:
+            feats, g_props, abcd, hsv_means = get_advanced_features(np.array(img))
+            scaled_feats = scaler.transform(feats)
+            
+            # Prediction
+            curr_model = models[selected_model_name]
+            prob = curr_model.predict_proba(scaled_feats)[0]
+            pred_idx = np.argmax(prob)
+            
+            st.markdown(f"""
+                <div class='metric-card'>
+                    <p style='text-align:center;'>PREDICTION</p>
+                    <h2 style='text-align:center;'>{classes[pred_idx]}</h2>
+                    <h1 style='text-align:center; color:#38bdf8;'>{prob[pred_idx]*100:.1f}%</h1>
+                    <p style='text-align:center; opacity:0.8;'>confidence</p>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            # Radar Chart for GLCM
+            fig_radar = go.Figure(data=go.Scatterpolar(
+                r=list(g_props.values()),
+                theta=list(g_props.keys()),
+                fill='toself'
+            ))
+            st.plotly_chart(fig_radar, use_container_width=True)
 
-                prediction = model.predict(scaled)[0]
-                probs = model.predict_proba(scaled)[0]
-
-                # Prediction Card
-                st.success(f"### Result: {classes[prediction]}")
-                st.metric("Model Confidence", f"{max(probs)*100:.2f}%")
-
-                # Probability Chart
-                st.write("**Differential Diagnosis (Probability Chart):**")
-                chart_df = pd.DataFrame({'Class': classes, 'Prob': probs}).sort_values('Prob')
-                fig = px.bar(chart_df, x='Prob', y='Class', orientation='h', 
-                             color='Prob', color_continuous_scale='Blues', template='plotly_white')
-                fig.update_layout(showlegend=False, height=300, margin=dict(l=0, r=0, t=0, b=0))
-                st.plotly_chart(fig, use_container_width=True)
-
-                # ABCD Expander
-                with st.expander("🔍 Detailed Morphological Metrics"):
-                    st.write(f"- **Asymmetry Score:** {features[0][-2]:.4f}")
-                    st.write(f"- **Border Irregularity:** {features[0][-1]:.4f}")
-        else:
-            st.info("Awaiting image upload to begin feature extraction.")
-
-# --- TAB 2: PERFORMANCE DATA ---
-with tab2:
-    st.header("Model Evaluation Summary")
+with t2:
+    # Model Comparison Graphs
+    st.subheader("Model Comparison Overview")
+    comp_data = pd.DataFrame({
+        'Model': ['SVM', 'Random Forest', 'XGBoost'],
+        'Accuracy': [71.9, 71.9, 72.8],
+        'Macro F1': [45.7, 45.5, 48.0]
+    })
+    fig_comp = px.bar(comp_data, x='Model', y='Accuracy', color='Model', barmode='group')
+    st.plotly_chart(fig_comp, use_container_width=True)
     
-    # High-level Metrics
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Test Accuracy", "87.4%")
-    m2.metric("Precision", "0.86")
-    m3.metric("Recall", "0.85")
-    m4.metric("F1-Score", "0.85")
-    
-    st.divider()
-    
-    p_col1, p_col2 = st.columns(2)
-    with p_col1:
-        st.subheader("Confusion Matrix")
-        # Ensure 'preprocessing_validation.png' is in your root folder
-        try:
-            st.image("preprocessing_validation.png", caption="Model Validation Results", use_container_width=True)
-        except:
-            st.error("Confusion matrix image not found. Please add 'preprocessing_validation.png' to GitHub.")
-
-    with p_col2:
-        st.subheader("Model Architecture")
-        st.write("""
-        **Support Vector Machine (SVM)**
-        - **Kernel:** RBF (Radial Basis Function)
-        - **C:** 10
-        - **Probability:** Enabled
-        - **Preprocessing:** Standard Scaling & SMOTE Oversampling
-        """)
-        st.write("**Feature Importance:** Color (HSV) and Texture (GLCM) represent the highest weight in model decision making.")
+    # Class Distribution
+    st.subheader("Dataset Class Distribution")
+    dist_data = {'Melanocytic Nevi': 6705, 'Melanoma': 1113, 'Benign Keratosis': 1099}
+    st.bar_chart(dist_data)
