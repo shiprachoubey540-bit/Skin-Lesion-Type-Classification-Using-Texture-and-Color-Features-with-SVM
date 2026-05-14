@@ -1,3 +1,5 @@
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/410b8322-8230-42fc-93c5-5c41d22ed97f" />
+
 Streamlit app URL=https://dw523maz7mk3kiqvz4wcln.streamlit.app/
 
 **Skin Lesion Classification using Machine Learning**
