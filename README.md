@@ -1,10 +1,18 @@
-**Skin Lesion Classification using Machine Learning**
+**Skin Lesion Type Classification Using Texture and Color Features with SVM
+NameProgrammeShipraMSc Data Science and BioAIP D NivedhMSc Data Science and BioAIDrisya Krishna K VMSc Data Science with Specialization in Computational Sciences**
 
-**Problem Statement:**
-The study requires skin lesion images to be classified into seven different categories which include melanoma and basal cell carcinoma through the application of conventional machine learning methods that exclude deep learning.
+NameProgrammeShipraMSc Data Science and BioAIP D NivedhMSc Data Science and BioAIDrisya Krishna K VMSc Data Science with Specialization in Computational Sciences
 
-**Dataset:**
-HAM10000 dataset: The dataset includes dermatoscopic images that show various skin lesions
+Problem Statement & Motivation
+
+Skin cancer is one of the most prevalent and potentially fatal forms of cancer, yet early detection significantly improves patient outcomes. Dermatologists traditionally diagnose skin lesions through visual inspection, a process that is time-consuming and prone to human error. This project aims to build an automated skin lesion classification system using traditional machine learning techniques — without relying on deep learning — to classify lesion images into seven clinically relevant categories including melanoma and basal cell carcinoma. By extracting handcrafted texture, color, and shape features, the system provides an interpretable and computationally efficient approach to assist in early skin cancer detection.
+
+Dataset Description
+
+Dataset: HAM10000 (Human Against Machine with 10000 training images)
+Source: Kaggle — dermatoscopic images of skin lesions
+Classes: 7 skin lesion types (e.g., melanoma, basal cell carcinoma, benign keratosis, etc.)
+Class Distribution: Heavily imbalanced — majority class nv (nevus) had 6,705 samples vs minority class df (dermatofibroma) with only 115 samples. SMOTE was applied to handle this.
 
 **Methodology:**
 1. Data collection
