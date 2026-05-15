@@ -1,7 +1,10 @@
-**Skin Lesion Type Classification Using Texture and Color Features with SVM
+##**Skin Lesion Type Classification Using Texture and Color Features with SVM
 NameProgrammeShipraMSc Data Science and BioAIP D NivedhMSc Data Science and BioAIDrisya Krishna K VMSc Data Science with Specialization in Computational Sciences**
 
-NameProgrammeShipraMSc Data Science and BioAIP D NivedhMSc Data Science and BioAIDrisya Krishna K VMSc Data Science with Specialization in Computational Sciences
+## Team Members
+- Shipra (MSc Data Science and BioAI)
+- P D Nivedh (MSc Data Science and BioAI)
+- Drisya Krishna K V (MSc Data Science with Specialization in Computational Sciences)
 
 Problem Statement & Motivation
 
