@@ -2,9 +2,9 @@
 
 
 ## Team Members
-- Shipra (MSc Data Science and BioAI)
-- P D Nivedh (MSc Data Science and BioAI)
-- Drisya Krishna K V (MSc Data Science with Specialization in Computational Sciences)
+- Shipra (MSc in Data Science and BioAI)
+- P D Nivedh (MSc in Data Science and BioAI)
+- Drisya Krishna K V (MSc in Data Science with Specialization in Computational Sciences)
 
 Problem Statement & Motivation
 
