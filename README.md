@@ -1,4 +1,4 @@
-Streamlit: https://nr3wvj6sot7xzmcubv5vof.streamlit.app/
+
 ## **Skin Lesion Type Classification Using Texture and Color Features with SVM**
 
 
@@ -109,7 +109,7 @@ A Streamlit web application was developed which enables users to perform two mai
 **Conclusion:**
 The project demonstrates machine learning's ability to classify skin lesions through its system which automatically classifies skin lesions and its development of a user-friendly system that delivers immediate prediction results.
 
-Streamlit app URL= https://skinnlesionn.streamlit.app
+Streamlit app URL= https://nr3wvj6sot7xzmcubv5vof.streamlit.app/
 
 ## 🖥️ App Screenshots
 
