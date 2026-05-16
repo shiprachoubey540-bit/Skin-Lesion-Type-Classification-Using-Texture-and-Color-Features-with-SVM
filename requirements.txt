@@ -1,0 +1,9 @@
+streamlit
+pandas
+numpy
+scikit-learn
+opencv-python-headless
+Pillow
+plotly
+plotly.express
+scikit-image
