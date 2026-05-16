@@ -7,3 +7,5 @@ Pillow
 plotly
 plotly.express
 scikit-image
+xgboost
+joblib
