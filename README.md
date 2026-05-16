@@ -108,6 +108,12 @@ A Streamlit web application was developed which enables users to perform two mai
 **Conclusion:**
 The project demonstrates machine learning's ability to classify skin lesions through its system which automatically classifies skin lesions and its development of a user-friendly system that delivers immediate prediction results.
 
-Streamlit app URL=https://dw523maz7mk3kiqvz4wcln.streamlit.app/
+Streamlit app URL= https://skinnlesionn.streamlit.app
 
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/68790a78-7d7c-412e-b94d-2b296f930c88" />
+## 🖥️ App Screenshots
+
+### Homepage
+![Homepage](homepage.png)
+
+### Model Output
+![Model Output](modeloutput.png)
