@@ -1,12 +1,6 @@
 
 ## **Skin Lesion Type Classification Using Texture and Color Features with SVM**
 
-
-## Team Members
-- Shipra (MSc in Data Science and BioAI)
-- P D Nivedh (MSc in Data Science and BioAI)
-- Drisya Krishna K V (MSc in Data Science with Specialization in Computational Sciences)
-
 Problem Statement & Motivation
 
 Skin cancer is one of the most prevalent and potentially fatal forms of cancer, yet early detection significantly improves patient outcomes. Dermatologists traditionally diagnose skin lesions through visual inspection, a process that is time-consuming and prone to human error. This project aims to build an automated skin lesion classification system using traditional machine learning techniques — without relying on deep learning — to classify lesion images into seven clinically relevant categories including melanoma and basal cell carcinoma. By extracting handcrafted texture, color, and shape features, the system provides an interpretable and computationally efficient approach to assist in early skin cancer detection.
